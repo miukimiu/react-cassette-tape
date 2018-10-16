@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "popmotion": "^8.4.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-scripts": "2.0.4"
+    "react-scripts": "2.0.4",
+    "styled-components": "^3.4.10"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -21,5 +23,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "snapsvg": "^0.5.1",
+    "snapsvg-cjs": "0.0.6",
+    "svg.js": "^2.6.6"
+  }
 }
