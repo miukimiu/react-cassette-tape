@@ -1,65 +1,27 @@
-import styled, { keyframes } from "styled-components";
-
-const rotating = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-const tapeMovingLeft = keyframes`
-  from {
-    cx: 90.3893;
-  }
-  to {
-    cx: 92.3893;
-  }
-`;
-
-const tapeMovingRight = keyframes`
-  from {
-    cx: 330.389;
-  }
-  to {
-    cx: 328.389;
-  }
-`;
+import styled from "styled-components";
 
 const Wrapper = styled.div`
-  .removed {
-    display: none;
-  }
-  .rotating {
-    animation: ${rotating} 1s linear infinite;
-  }
-  .tape-moving-left {
-    animation: ${tapeMovingLeft} 1s linear infinite;
-  }
-  .tape-moving-right {
-    animation: ${tapeMovingRight} 1s linear infinite;
+  position: relative;
+  padding-top: 100px;
+  overflow-x: hidden;
+
+  #defaultCanvas0 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
   }
 
-  #playPauseBtn {
-    &.active {
-      transform: translate(169.344053px, ${props => props.btnActivePositon}px);
-    }
+  svg {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    z-index: 100;
+    margin-top: -40px;
   }
-  #recBtn {
-    .active {
-      transform: translate(0.344053px, ${props => props.btnActivePositon}px);
-    }
-  }
-  #forwardBtn {
-    .active {
-      transform: translate(0.344053px, ${props => props.btnActivePositon}px);
-    }
-  }
-  #backwardBtn {
-    .active {
-      transform: translate(0.344053px, ${props => props.btnActivePositon}px);
-    }
+
+  #white-bg-buttons {
+    fill: #19ca90;
   }
 `;
 

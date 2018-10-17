@@ -1,8 +1,10 @@
 import React from "react";
 import { tween, styler, easing, action } from "popmotion";
 import { ReactComponent as CassetteTapeSVG } from "../svg/cassette.svg";
-import Recorder from "./Recorder";
 import CassetteAudio from "./CassetteAudio";
+import AudioVisualization from "./AudioVisualization";
+import AudioRecorder from "./libs/audio-recorder";
+import AudioWaves from "./AudioWaves";
 import Wrapper from "./Wrapper";
 
 class CassetteTape extends React.Component {
@@ -10,17 +12,19 @@ class CassetteTape extends React.Component {
     super();
 
     this.state = {
-      recState: false,
+      isRecording: false,
       playState: false,
       currentTrack: 0,
       cassetteReady: false,
-      playlist: ["dirty_south_loop_85bpm", "pop_hiphop_loop_100bpm"]
+      playlist: ["dirty_south_loop_85bpm", "pop_hiphop_loop_100bpm"],
+      recordingUrls: []
     };
 
     this.casseteRef = React.createRef();
 
     this.initialBtnPos = 0.68;
     this.activeBtnPos = 8;
+    this.recorder = new AudioRecorder();
   }
 
   componentDidMount() {
@@ -42,7 +46,7 @@ class CassetteTape extends React.Component {
 
     recBtn.addEventListener("click", () => {
       this.setState(prevState => ({
-        recState: !prevState.recState
+        isRecording: !prevState.isRecording
       }));
     });
 
@@ -94,7 +98,7 @@ class CassetteTape extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { playState, recState } = this.state;
+    const { playState, isRecording } = this.state;
     const playIcon = styler(this.casseteRef.current.querySelector("#playIcon"));
     const pauseIcon = styler(
       this.casseteRef.current.querySelector("#pauseIcon")
@@ -134,8 +138,8 @@ class CassetteTape extends React.Component {
       }
     }
 
-    if (recState !== prevState.recState) {
-      if (recState) {
+    if (isRecording !== prevState.isRecording) {
+      if (isRecording) {
         this.wheelAnimation();
 
         tween({
@@ -144,6 +148,8 @@ class CassetteTape extends React.Component {
           duration: 400,
           ease: easing.linear
         }).start(recBtn.set("transform"));
+
+        this.record();
       } else {
         this.stopWheelAnimation();
 
@@ -153,6 +159,8 @@ class CassetteTape extends React.Component {
           duration: 400,
           ease: easing.linear
         }).start(recBtn.set("transform"));
+
+        this.stop();
       }
     }
   }
@@ -222,21 +230,30 @@ class CassetteTape extends React.Component {
     }.mp3`;
   };
 
-  onData(recordedBlob) {
-    // console.log("chunk of real-time data is: ", recordedBlob);
-  }
+  record = () => {
+    this.recorder.record();
+    this.setState({ isRecording: true });
+  };
 
-  onStop(recordedBlob) {
-    // console.log("recordedBlob is: ", recordedBlob);
-  }
+  stop = () => {
+    this.recorder.stop().then(recordingUrls => {
+      this.setState({ recordingUrls, isRecording: false });
+    });
+  };
 
   render() {
     console.log("render", this.state);
 
-    const { currentTrack, playState, playlist, cassetteReady } = this.state;
+    const {
+      currentTrack,
+      playState,
+      playlist,
+      cassetteReady,
+      recordingUrls
+    } = this.state;
 
     return (
-      <Wrapper innerRef={this.casseteRef}>
+      <Wrapper innerRef={this.casseteRef} className="cassette-wrapper">
         <CassetteTapeSVG />
         <CassetteAudio
           currentTrack={currentTrack}
@@ -245,14 +262,8 @@ class CassetteTape extends React.Component {
           titleUpdate={this.titleUpdate}
           cassetteReady={cassetteReady}
         />
-        <Recorder
-          record={this.state.recState}
-          className="sound-wave"
-          onStop={this.onStop}
-          onData={this.onData}
-          strokeColor="#000000"
-          backgroundColor="#FF4081"
-        />
+        <AudioVisualization />
+        <AudioWaves recordingUrls={recordingUrls} />
       </Wrapper>
     );
   }

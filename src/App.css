@@ -1,29 +1,10 @@
-/* animations */
-
-.removed {
-  display: none;
+.cassette-wrapper {
+  position: relative;
+  padding-top: 100px;
 }
-.rotating {
-  animation: rotating 1s linear infinite;
-}
-.tape-moving {
-  animation: tapeMoving 1s linear infinite;
-}
-
-@keyframes rotating {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes tapeMoving {
-  from {
-    cx: 90.3893;
-  }
-  to {
-    cx: 92.3893;
-  }
+#defaultCanvas0 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
 }

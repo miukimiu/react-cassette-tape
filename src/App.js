@@ -7,6 +7,7 @@ class App extends Component {
     return (
       <div className="App">
         <CassetteTape />
+        {/* <Example /> */}
       </div>
     );
   }
