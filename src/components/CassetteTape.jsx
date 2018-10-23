@@ -22,7 +22,12 @@ class CassetteTape extends React.Component {
       isPlaying: false,
       currentTrack: 0,
       cassetteReady: false,
-      playlist: ["dirty_south_loop_85bpm", "pop_hiphop_loop_100bpm"],
+      playlist: [
+        "dirty_south_loop_85bpm",
+        "pop_hiphop_loop_100bpm",
+        "beatbox-aha-a-100bpm",
+        "philippic-beatbox_100bpm"
+      ],
       recordingUrls: []
     };
 
@@ -31,6 +36,32 @@ class CassetteTape extends React.Component {
     this.audio = new Audio();
     this.dir = "audio/";
     this.ext = ".mp3";
+  }
+
+  componentDidMount() {
+    this.audio.addEventListener(
+      "ended",
+      function() {
+        this.currentTime = 0;
+        this.play();
+      },
+      false
+    );
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { playlist, currentTrack, isPlaying } = this.state;
+
+    if (currentTrack !== prevState.currentTrack) {
+      console.log("--", currentTrack);
+
+      this.audio.src = this.dir + playlist[currentTrack] + this.ext;
+
+      if (isPlaying) {
+        console.log(isPlaying);
+        this.audio.play();
+      }
+    }
   }
 
   play = () => {
@@ -103,6 +134,8 @@ class CassetteTape extends React.Component {
     } = this.state;
 
     const { vizColor } = this.props;
+
+    console.log(currentTrack);
 
     return (
       <ThemeProvider
