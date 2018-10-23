@@ -32,26 +32,30 @@ class CassetteTape extends React.Component {
     this.ext = ".mp3";
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  play = () => {
     const { isPlaying, playlist, currentTrack } = this.state;
 
     this.audio.src = this.dir + playlist[currentTrack] + this.ext;
 
-    if (isPlaying) {
+    if (!isPlaying) {
       this.audio.play();
     } else {
       this.audio.pause();
     }
-  }
 
-  play = () => {
     this.setState(prevState => ({
       isPlaying: !prevState.isPlaying
     }));
   };
 
   record = () => {
-    this.recorder.record();
+    const { isRecording } = this.state;
+
+    if (isRecording) {
+      this.stopRecording();
+    } else {
+      this.recorder.record();
+    }
 
     this.setState(prevState => ({
       isRecording: !prevState.isRecording
@@ -60,7 +64,7 @@ class CassetteTape extends React.Component {
 
   stopRecording = () => {
     this.recorder.stop().then(recordingUrls => {
-      this.setState({ recordingUrls, isRecording: false });
+      this.setState({ recordingUrls });
     });
   };
 

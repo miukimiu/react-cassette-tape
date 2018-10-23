@@ -19,7 +19,7 @@ class Buttons extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { isPlaying, isRecording, stopRecording } = this.props;
+    const { isPlaying, isRecording } = this.props;
 
     const playIcon = styler(this.buttonsRef.current.querySelector("#playIcon"));
     const pauseIcon = styler(
@@ -72,8 +72,6 @@ class Buttons extends React.Component {
           duration: 400,
           ease: easing.linear
         }).start(recBtn.set("transform"));
-
-        stopRecording();
       }
     }
   }

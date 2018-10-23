@@ -20,9 +20,9 @@ class Center extends React.Component {
     }
 
     if (isRecording !== prevProps.isRecording) {
-      if (isRecording) {
+      if (isRecording & !isPlaying) {
         this.wheelAnimation();
-      } else {
+      } else if (!isPlaying) {
         this.stopWheelAnimation();
       }
     }
