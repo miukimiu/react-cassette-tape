@@ -1,6 +1,6 @@
 import React from "react";
 import P5Wrapper from "react-p5-wrapper";
-import sketch from "./libs/sketch";
+import sketch from "./visualization/sketch";
 import debounce from "lodash/debounce";
 
 class AudioVisualization extends React.Component {

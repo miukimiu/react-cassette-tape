@@ -3,20 +3,30 @@ import styled from "styled-components";
 
 const WavesContainer = styled.div`
   position: relative;
-  min-height: 200px;
-  background: #19ca90;
+  min-height: 300px;
   z-index: 100;
+
+  > div {
+    max-width: 780px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  h2 {
+    color: #ffffff;
+    font-size: 26px;
+    line-height: 36px;
+    font-weight: 300;
+  }
 `;
 
 const AudioPlayerContainer = styled.div`
-  margin: 0 auto;
+  audio {
+    margin-bottom: 10px;
+  }
 `;
 
 class AudioWaves extends React.Component {
-  constructor() {
-    super();
-  }
-
   render() {
     const { recordingUrls } = this.props;
 
@@ -28,8 +38,14 @@ class AudioWaves extends React.Component {
 
     return (
       <WavesContainer>
-        <h1>Ops</h1>
-        {waves}
+        <div>
+          <h2>
+            Don’t be shy! Press play. Let the loop play! <br />
+            When you’re ready press rec and record your freestyle!
+          </h2>
+
+          {waves}
+        </div>
       </WavesContainer>
     );
   }

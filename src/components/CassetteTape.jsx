@@ -1,9 +1,14 @@
 import React from "react";
-import { tween, styler, easing, action } from "popmotion";
-import { ReactComponent as CassetteTapeSVG } from "../svg/cassette.svg";
-import CassetteAudio from "./CassetteAudio";
+import {
+  Background,
+  Buttons,
+  Cassette,
+  Center,
+  Timebox,
+  TrackTitle
+} from "./cassette/index";
 import AudioVisualization from "./AudioVisualization";
-import AudioRecorder from "./libs/audio-recorder";
+import AudioRecorder from "./recorder/audio-recorder";
 import AudioWaves from "./AudioWaves";
 import Wrapper from "./Wrapper";
 
@@ -13,7 +18,7 @@ class CassetteTape extends React.Component {
 
     this.state = {
       isRecording: false,
-      playState: false,
+      isPlaying: false,
       currentTrack: 0,
       cassetteReady: false,
       playlist: ["dirty_south_loop_85bpm", "pop_hiphop_loop_100bpm"],
@@ -21,247 +26,94 @@ class CassetteTape extends React.Component {
     };
 
     this.casseteRef = React.createRef();
-
-    this.initialBtnPos = 0.68;
-    this.activeBtnPos = 8;
     this.recorder = new AudioRecorder();
-  }
-
-  componentDidMount() {
-    const playPauseBtn = this.casseteRef.current.querySelector("#playPauseBtn");
-    const recBtn = this.casseteRef.current.querySelector("#recBtn");
-    const backwardBtn = this.casseteRef.current.querySelector("#backwardBtn");
-    const forwardBtn = this.casseteRef.current.querySelector("#forwardBtn");
-    const pauseIcon = styler(
-      this.casseteRef.current.querySelector("#pauseIcon")
-    );
-
-    pauseIcon.set("display", "none");
-
-    playPauseBtn.addEventListener("click", () => {
-      this.setState(prevState => ({
-        playState: !prevState.playState
-      }));
-    });
-
-    recBtn.addEventListener("click", () => {
-      this.setState(prevState => ({
-        isRecording: !prevState.isRecording
-      }));
-    });
-
-    backwardBtn.addEventListener("click", () => {
-      console.log("this.activeBtnPos", this.activeBtnPos);
-
-      tween({
-        from: `translate(85.344 ${this.activeBtnPos})`,
-        to: `translate(85.344 ${this.initialBtnPos})`,
-        duration: 1000,
-        ease: easing.linear,
-        yoyo: 0
-      }).start(styler(backwardBtn).set("transform"));
-
-      if (this.state.currentTrack > 0) {
-        this.setState(prevState => ({
-          currentTrack: prevState.currentTrack - 1
-        }));
-      } else {
-        this.setState({
-          currentTrack: this.state.playlist.length - 1
-        });
-      }
-    });
-
-    forwardBtn.addEventListener("click", () => {
-      tween({
-        from: `translate(253.344 ${this.activeBtnPos})`,
-        to: `translate(253.344 ${this.initialBtnPos})`,
-        duration: 1000,
-        ease: easing.linear,
-        yoyo: 0
-      }).start(styler(forwardBtn).set("transform"));
-
-      if (this.state.currentTrack === this.state.playlist.length - 1) {
-        this.setState({
-          currentTrack: 0
-        });
-      } else {
-        this.setState(prevState => ({
-          currentTrack: prevState.currentTrack + 1
-        }));
-      }
-    });
-
-    this.setState({
-      cassetteReady: true
-    });
+    this.audio = new Audio();
+    this.dir = "audio/";
+    this.ext = ".mp3";
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { playState, isRecording } = this.state;
-    const playIcon = styler(this.casseteRef.current.querySelector("#playIcon"));
-    const pauseIcon = styler(
-      this.casseteRef.current.querySelector("#pauseIcon")
-    );
-    const playPauseBtn = styler(
-      this.casseteRef.current.querySelector("#playPauseBtn")
-    );
-    const recBtn = styler(this.casseteRef.current.querySelector("#recBtn"));
-    const initialBtnPos = 0.68;
-    const activeBtnPos = 8;
+    const { isPlaying, playlist, currentTrack } = this.state;
 
-    // if play state changes
-    if (playState !== prevState.playState) {
-      if (playState) {
-        this.wheelAnimation();
+    this.audio.src = this.dir + playlist[currentTrack] + this.ext;
 
-        playIcon.set("display", "none");
-        pauseIcon.set("display", "block");
-
-        tween({
-          from: `translate(169.344 ${initialBtnPos})`,
-          to: `translate(169.344 ${activeBtnPos})`,
-          duration: 400,
-          ease: easing.linear
-        }).start(playPauseBtn.set("transform"));
-      } else {
-        this.stopWheelAnimation();
-        playIcon.set("display", "block");
-        pauseIcon.set("display", "none");
-
-        tween({
-          from: `translate(169.344 ${activeBtnPos})`,
-          to: `translate(169.344 ${initialBtnPos})`,
-          duration: 400,
-          ease: easing.linear
-        }).start(playPauseBtn.set("transform"));
-      }
-    }
-
-    if (isRecording !== prevState.isRecording) {
-      if (isRecording) {
-        this.wheelAnimation();
-
-        tween({
-          from: `translate(0.344053 ${initialBtnPos})`,
-          to: `translate(0.344053 ${activeBtnPos})`,
-          duration: 400,
-          ease: easing.linear
-        }).start(recBtn.set("transform"));
-
-        this.record();
-      } else {
-        this.stopWheelAnimation();
-
-        tween({
-          from: `translate(0.344053 ${activeBtnPos})`,
-          to: `translate(0.344053 ${initialBtnPos})`,
-          duration: 400,
-          ease: easing.linear
-        }).start(recBtn.set("transform"));
-
-        this.stop();
-      }
+    if (isPlaying) {
+      this.audio.play();
+    } else {
+      this.audio.pause();
     }
   }
 
-  wheelAnimation = () => {
-    const wheelLeft = styler(
-      this.casseteRef.current.querySelector("#wheelLeft")
-    );
-    const wheelRight = styler(
-      this.casseteRef.current.querySelector("#wheelRight")
-    );
-    const tapeLeft = styler(this.casseteRef.current.querySelector("#tapeLeft"));
-    const tapeRight = styler(
-      this.casseteRef.current.querySelector("#tapeRight")
-    );
-
-    const animateWheelLeft = tween({
-      from: { rotate: 0 },
-      to: { rotate: -360 },
-      duration: 3000,
-      loop: Infinity,
-      ease: easing.linear
-    });
-
-    const animateWheelRight = tween({
-      from: { rotate: 0 },
-      to: { rotate: -360 },
-      duration: 3000,
-      loop: Infinity,
-      ease: easing.linear
-    });
-
-    const animateTapeLeft = tween({
-      from: 90.3893,
-      to: 92.3893,
-      duration: 1000,
-      loop: Infinity,
-      ease: easing.linear
-    });
-
-    const animateTapelRight = tween({
-      from: 330.389,
-      to: 328.389,
-      duration: 1000,
-      loop: Infinity,
-      ease: easing.linear
-    });
-
-    this.wheelLeftAnimation = animateWheelLeft.start(wheelLeft.set);
-    this.wheelRightAnimation = animateWheelRight.start(wheelRight.set);
-    this.tapeLeftAnimation = animateTapeLeft.start(tapeLeft.set("cx"));
-    this.tapeRightAnimation = animateTapelRight.start(tapeRight.set("cx"));
-  };
-
-  stopWheelAnimation = () => {
-    this.wheelLeftAnimation && this.wheelLeftAnimation.stop();
-    this.wheelRightAnimation && this.wheelRightAnimation.stop();
-    this.tapeLeftAnimation && this.tapeLeftAnimation.stop();
-    this.tapeRightAnimation && this.tapeRightAnimation.stop();
-  };
-
-  titleUpdate = () => {
-    const { playlist, currentTrack } = this.state;
-
-    this.casseteRef.current.querySelector("#tracktitle tspan").innerHTML = `${
-      playlist[currentTrack]
-    }.mp3`;
+  play = () => {
+    this.setState(prevState => ({
+      isPlaying: !prevState.isPlaying
+    }));
   };
 
   record = () => {
     this.recorder.record();
-    this.setState({ isRecording: true });
+
+    this.setState(prevState => ({
+      isRecording: !prevState.isRecording
+    }));
   };
 
-  stop = () => {
+  stopRecording = () => {
     this.recorder.stop().then(recordingUrls => {
       this.setState({ recordingUrls, isRecording: false });
     });
   };
 
-  render() {
-    console.log("render", this.state);
+  prevTrack = () => {
+    if (this.state.currentTrack > 0) {
+      this.setState(prevState => ({
+        currentTrack: prevState.currentTrack - 1
+      }));
+    } else {
+      this.setState({
+        currentTrack: this.state.playlist.length - 1
+      });
+    }
+  };
 
+  nextTrack = () => {
+    if (this.state.currentTrack === this.state.playlist.length - 1) {
+      this.setState({
+        currentTrack: 0
+      });
+    } else {
+      this.setState(prevState => ({
+        currentTrack: prevState.currentTrack + 1
+      }));
+    }
+  };
+
+  render() {
     const {
       currentTrack,
-      playState,
+      isPlaying,
+      isRecording,
       playlist,
-      cassetteReady,
       recordingUrls
     } = this.state;
 
     return (
       <Wrapper innerRef={this.casseteRef} className="cassette-wrapper">
-        <CassetteTapeSVG />
-        <CassetteAudio
-          currentTrack={currentTrack}
-          playlist={playlist}
-          playState={playState}
-          titleUpdate={this.titleUpdate}
-          cassetteReady={cassetteReady}
-        />
+        <Cassette>
+          <Center isPlaying={isPlaying} isRecording={isRecording} />
+          <Timebox />
+          <TrackTitle title={playlist[currentTrack]} />
+          <Background />
+          <Buttons
+            play={this.play}
+            record={this.record}
+            stopRecording={this.stopRecording}
+            isPlaying={isPlaying}
+            isRecording={isRecording}
+            prevTrack={this.prevTrack}
+            nextTrack={this.nextTrack}
+          />
+        </Cassette>
         <AudioVisualization />
         <AudioWaves recordingUrls={recordingUrls} />
       </Wrapper>
