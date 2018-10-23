@@ -53,12 +53,9 @@ class CassetteTape extends React.Component {
     const { playlist, currentTrack, isPlaying } = this.state;
 
     if (currentTrack !== prevState.currentTrack) {
-      console.log("--", currentTrack);
-
       this.audio.src = this.dir + playlist[currentTrack] + this.ext;
 
       if (isPlaying) {
-        console.log(isPlaying);
         this.audio.play();
       }
     }
@@ -134,8 +131,6 @@ class CassetteTape extends React.Component {
     } = this.state;
 
     const { vizColor } = this.props;
-
-    console.log(currentTrack);
 
     return (
       <ThemeProvider

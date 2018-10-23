@@ -34,7 +34,6 @@ class Buttons extends React.Component {
 
     if (isPlaying !== prevProps.isPlaying) {
       if (isPlaying) {
-        console.log("isplaying");
         playIcon.set("display", "none");
         pauseIcon.set("display", "block");
 
@@ -108,6 +107,7 @@ class Buttons extends React.Component {
 
   render() {
     const { play, record } = this.props;
+
     return (
       <g
         id="buttons"
@@ -130,13 +130,7 @@ class Buttons extends React.Component {
           </g>
         </g>
         <g id="playPauseBtn" transform="translate(169.344 .68)" onClick={play}>
-          <rect
-            id="Rectangle-10"
-            width="78.689"
-            height="94.861"
-            fill="#2F3B46"
-            rx={1}
-          />
+          <rect width="78.689" height="94.861" fill="#2F3B46" rx={1} />
           <g fill="#171D22" transform="translate(8.197 62.786)">
             <rect width="62.295" height="5.858" y="18.04" fillOpacity=".5" />
             <rect width="62.295" height="5.858" y="9.497" fillOpacity=".4" />
