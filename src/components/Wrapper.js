@@ -4,6 +4,7 @@ const Wrapper = styled.div`
   position: relative;
   padding-top: 100px;
   overflow-x: hidden;
+  background: ${props => props.vizColor};
 
   #defaultCanvas0 {
     position: absolute;

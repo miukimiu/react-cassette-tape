@@ -3,6 +3,7 @@ import "p5/lib/addons/p5.sound";
 
 export default function sketch(p) {
   let mic;
+  let vizColor = "";
 
   p.setup = function() {
     p.createCanvas(p.windowWidth + 20, 500);
@@ -19,14 +20,20 @@ export default function sketch(p) {
     p.resizeCanvas(p.windowWidth, 500);
   };
 
+  p.myCustomRedrawAccordingToNewPropsHandler = function(props) {
+    if (props.vizColor) {
+      vizColor = props.vizColor;
+    }
+  };
+
   p.draw = function() {
     var yoff = 0.0;
     // Get the overall volume (between 0 and 1.0)
     var vol = mic.getLevel();
 
     p.background(255, 255, 255);
-    p.stroke(25, 202, 144);
-    p.fill(25, 202, 144);
+    p.stroke(vizColor);
+    p.fill(vizColor);
 
     // We are going to draw a polygon out of the wave points
     p.beginShape();

@@ -2,6 +2,7 @@ import React from "react";
 import P5Wrapper from "react-p5-wrapper";
 import sketch from "./visualization/sketch";
 import debounce from "lodash/debounce";
+import { ThemeConsumer } from "../core/ThemeContext";
 
 class AudioVisualization extends React.Component {
   constructor(props) {
@@ -32,7 +33,16 @@ class AudioVisualization extends React.Component {
   render() {
     const { width, height } = this.state;
     return (
-      <P5Wrapper sketch={sketch} windowWidth={width} windowHeight={height} />
+      <ThemeConsumer>
+        {context => (
+          <P5Wrapper
+            sketch={sketch}
+            windowWidth={width}
+            windowHeight={height}
+            vizColor={context.vizColor}
+          />
+        )}
+      </ThemeConsumer>
     );
   }
 }

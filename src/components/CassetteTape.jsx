@@ -7,6 +7,7 @@ import {
   Timebox,
   TrackTitle
 } from "./cassette/index";
+import { ThemeProvider } from "../core/ThemeContext";
 import AudioVisualization from "./AudioVisualization";
 import AudioRecorder from "./recorder/audio-recorder";
 import AudioWaves from "./AudioWaves";
@@ -101,26 +102,38 @@ class CassetteTape extends React.Component {
       recordingUrls
     } = this.state;
 
+    const { vizColor } = this.props;
+
     return (
-      <Wrapper innerRef={this.casseteRef} className="cassette-wrapper">
-        <Cassette>
-          <Center isPlaying={isPlaying} isRecording={isRecording} />
-          <Timebox />
-          <TrackTitle title={playlist[currentTrack]} />
-          <Background />
-          <Buttons
-            play={this.play}
-            record={this.record}
-            stopRecording={this.stopRecording}
-            isPlaying={isPlaying}
-            isRecording={isRecording}
-            prevTrack={this.prevTrack}
-            nextTrack={this.nextTrack}
-          />
-        </Cassette>
-        <AudioVisualization />
-        <AudioWaves recordingUrls={recordingUrls} />
-      </Wrapper>
+      <ThemeProvider
+        value={{
+          vizColor: vizColor
+        }}
+      >
+        <Wrapper
+          innerRef={this.casseteRef}
+          className="cassette-wrapper"
+          vizColor={vizColor}
+        >
+          <Cassette>
+            <Center isPlaying={isPlaying} isRecording={isRecording} />
+            <Timebox />
+            <TrackTitle title={playlist[currentTrack]} />
+            <Background />
+            <Buttons
+              play={this.play}
+              record={this.record}
+              stopRecording={this.stopRecording}
+              isPlaying={isPlaying}
+              isRecording={isRecording}
+              prevTrack={this.prevTrack}
+              nextTrack={this.nextTrack}
+            />
+          </Cassette>
+          <AudioVisualization />
+          <AudioWaves recordingUrls={recordingUrls} />
+        </Wrapper>
+      </ThemeProvider>
     );
   }
 }

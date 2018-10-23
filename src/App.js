@@ -19,7 +19,6 @@ html {
 body {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
-  background: #19ca90;
 }
 `;
 
@@ -27,7 +26,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <CassetteTape />
+        <CassetteTape vizColor="#19ca90" />
       </div>
     );
   }
