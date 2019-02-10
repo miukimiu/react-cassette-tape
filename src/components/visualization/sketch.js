@@ -58,4 +58,9 @@ export default function sketch(p) {
     p.vertex(0, p.windowHeight);
     p.endShape(p.CLOSE);
   };
+
+  // Start the audio context on a click/touch event
+  p.touchStarted = function() {
+    mic.resume();
+  };
 }

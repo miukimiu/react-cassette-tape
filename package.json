@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "p5": "^0.7.3",
     "popmotion": "^8.4.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
@@ -28,7 +29,6 @@
   "devDependencies": {
     "inline-worker": "^1.1.0",
     "lodash": "^4.17.11",
-    "p5": "^0.7.2",
     "react-p5-wrapper": "0.0.4",
     "snapsvg": "^0.5.1",
     "snapsvg-cjs": "0.0.6",
