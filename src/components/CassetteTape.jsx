@@ -83,6 +83,9 @@ class CassetteTape extends React.Component {
     if (isRecording) {
       this.stopRecording();
     } else {
+      if (this.recorder.recorder.context.state === "suspended") {
+        this.recorder.recorder.context.resume();
+      }
       this.recorder.record();
     }
 
@@ -139,7 +142,7 @@ class CassetteTape extends React.Component {
         }}
       >
         <Wrapper
-          innerRef={this.casseteRef}
+          ref={this.casseteRef}
           className="cassette-wrapper"
           vizColor={vizColor}
         >

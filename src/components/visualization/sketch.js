@@ -58,4 +58,10 @@ export default function sketch(p) {
     p.vertex(0, p.windowHeight);
     p.endShape(p.CLOSE);
   };
+
+  p.touchStarted = function() {
+    if (mic.mediaStream.context.state !== "running") {
+      mic.mediaStream.context.resume();
+    }
+  };
 }
