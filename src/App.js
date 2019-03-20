@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import CassetteTape from "./components/CassetteTape";
-import { injectGlobal } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import styledNormalize from "styled-normalize";
 
-injectGlobal`
+const GlobalStyles = createGlobalStyle`
 
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400');
 
-${styledNormalize}
+${styledNormalize};
 
 html {
   box-sizing: border-box;
@@ -27,6 +27,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <GlobalStyles />
         <CassetteTape vizColor="#19ca90" />
       </div>
     );

@@ -8,6 +8,7 @@ class AudioRecorder {
     };
 
     let audioContext;
+
     try {
       // webkit shim
       window.AudioContext = window.AudioContext || window.webkitAudioContext;
