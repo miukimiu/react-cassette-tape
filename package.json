@@ -29,7 +29,7 @@
   ],
   "devDependencies": {
     "inline-worker": "^1.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "snapsvg": "^0.5.1",
     "snapsvg-cjs": "0.0.6",
     "svg.js": "^2.6.6"
