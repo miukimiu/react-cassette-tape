@@ -8,7 +8,7 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-p5-wrapper": "^0.0.4",
-    "react-scripts": "2.0.4",
+    "react-scripts": "5.0.1",
     "styled-components": "^4.1.3",
     "styled-normalize": "^8.0.6"
   },
