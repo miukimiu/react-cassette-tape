@@ -14,7 +14,7 @@ https://github.com/miukimiu/cassette-tape
 
 
 ## Demo
-http://cassette-tape.now.sh/
+https://cassette-tape.vercel.app
 
 ## Contribute
 
